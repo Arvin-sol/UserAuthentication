@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using UserAuthentication.Application.Commands;
+using UserAuthentication.Application.Queries;
 using UserAuthentication.Presentation.Models;
 
 namespace UserAuthentication.Presentation.Controllers
@@ -50,9 +51,19 @@ namespace UserAuthentication.Presentation.Controllers
         [Route("/SignIn")]
         public async Task<IActionResult> SingIn(LoginUserCommand command)
         {
-             await _sender.Send(command);
+            var res = await _sender.Send(command);
+            RedirectToAction($"UserInformation/{res.Id}");
             return View();
         }
+        [HttpGet]
+        [Route("/UserInformation/{id?}")]
+        public async Task<IActionResult> UserInformation(Guid id)
+        {
+            GetUserInformationQuery query = new() { Id = id };
+            var resualt  = await _sender.Send(query);
+            return View(resualt);
+        }
+
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
