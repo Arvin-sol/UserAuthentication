@@ -5,6 +5,9 @@ using UserAthentication.Domain.IRepositories;
 using UserAuthentication.Application.Commands;
 using UserAuthentication.Application.Commands.Handlers;
 using UserAuthentication.Application.Common;
+using UserAuthentication.Application.DTOs;
+using UserAuthentication.Application.Queries;
+using UserAuthentication.Application.Queries.Handlers;
 using UserAuthentication.Infrastructure.Common;
 using UserAuthentication.Infrastructure.Repositories;
 
@@ -17,7 +20,7 @@ namespace UserAuthentication.Presentation
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
-            builder.Services.AddControllersWithViews();
+            builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
             //DataBase
             builder.Services.AddDbContext<ApplicationDbContext>(
                 x => x.UseSqlServer(
@@ -28,10 +31,11 @@ namespace UserAuthentication.Presentation
             builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(typeof(Program).Assembly));
 
             builder.Services.AddScoped<IUserRepository, UserRepository>();
+            builder.Services.AddScoped<IEmployeeStudentRepository, EmployeeStudentRepository>();
             builder.Services.AddScoped<IUnitOfWork ,UnitOfWork>();
             builder.Services.AddScoped<IRequestHandler<CreateUserCommand, bool>, CreateUserCommandHandler>();
-
-
+            builder.Services.AddScoped<IRequestHandler<LoginUserCommand, UserDTO>, LoginUserCommandHandler>();
+            builder.Services.AddScoped<IRequestHandler<GetUserInformationQuery, UserDTO>, GetUserInformationQueryHandler>();
 
             var app = builder.Build();
 

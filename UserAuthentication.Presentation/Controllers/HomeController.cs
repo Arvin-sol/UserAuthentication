@@ -26,28 +26,28 @@ namespace UserAuthentication.Presentation.Controllers
         {
             return View();
         }
-        [Route("/SingUp")]
+        [Route("/SignUp")]
         [HttpGet]
         public IActionResult SingUp()
         {
             return View();
         }
         [HttpPost]
-        [Route("/SingUp")]
+        [Route("/SignUp")]
         public async Task<IActionResult> SingUp(CreateUserCommand command)
         {
             await _sender.Send(command);
             return View();
         }
 
-        [Route("/SingIn")]
+        [Route("/SignIn")]
         [HttpGet]
         public IActionResult SingIn()
         {
             return View();
         }
         [HttpPost]
-        [Route("/SingIn")]
+        [Route("/SignIn")]
         public async Task<IActionResult> SingIn(LoginUserCommand command)
         {
              await _sender.Send(command);
